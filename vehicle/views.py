@@ -7,11 +7,14 @@ from datetime import datetime
 from vehicle.models import Vehicle, Route, VehicleRoute, VehicleStatus
 from project import encryption_utils as crypt
 import json
+import logging
 
 STATUS_LOGGED_IN = 'logged_in'
 STATUS_LOGGED_OUT = 'logged_out'
 TOKEN_KEY = '66e67b8d-445f-43d2-8bb2-38981629ecf4'
 TOKEN_VALID_TIMEOUT = 3600 * 24
+
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -43,8 +46,8 @@ def vehicle_login(request):
             vs.save()
 
         return HttpResponse(json.dumps({'vehicle_id': vehicle_id, 'route_number': r.route.route_number}), content_type='application/json')
-    except:
-        pass
+    except Exception as e:
+        logger.error(e)
     return HttpResponseBadRequest()
 
 @csrf_exempt
@@ -63,8 +66,8 @@ def vehicle_location(request):
         vs.save(update_fields=['latitude', 'longitude', 'updated_at', 'status'])
 
         return HttpResponse(json.dumps({'success': True}), content_type='application/json')
-    except:
-        pass
+    except Exception as e:
+        logger.error(e)
     return HttpResponseBadRequest()
 
 @csrf_exempt
@@ -79,8 +82,8 @@ def vehicle_logout(request):
         vs.save(update_fields=['status'])
 
         return HttpResponse(json.dumps({'success': True}), content_type='application/json')
-    except:
-        pass
+    except Exception as e:
+        logger.error(e)
     return HttpResponseBadRequest()
 
 def routes(request):
@@ -113,7 +116,8 @@ def user_login(request):
                     'token': token
                 }
             }), content_type='application/json')
-    except:
+    except Exception as e:
+        logger.error(e)
         pass
     return HttpResponseBadRequest()
 
@@ -127,7 +131,8 @@ def user_validate_token(request):
         seconds_after_creation = (datetime.now() - token_creation_time).seconds
         valid = (seconds_after_creation < TOKEN_VALID_TIMEOUT)
         return HttpResponse(json.dumps({'valid': valid}), content_type='application/json')
-    except:
+    except Exception as e:
+        logger.error(e)
         pass
     return HttpResponseBadRequest()
 
@@ -174,6 +179,7 @@ def vehicles(request):
             vehicles.append(v)
 
         return HttpResponse(json.dumps({'vehicles': vehicles}), content_type='application/json')
-    except:
+    except Exception as e:
+        logger.error(e)
         pass
     return HttpResponseBadRequest()
