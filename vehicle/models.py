@@ -11,12 +11,18 @@ class Route(models.Model):
     route_polyline = models.TextField(null=True,blank=True)
     description = models.TextField(null=True,blank=True)
 
+    def __str__(self):
+        return self.route_number
+
     def __unicode__(self):
         return self.route_number
 
 class Vehicle(models.Model):
     registration_number = models.CharField(max_length=20)
     description = models.TextField(null=True,blank=True)
+
+    def __str__(self):
+        return self.registration_number
 
     def __unicode__(self):
         return self.registration_number
@@ -28,6 +34,9 @@ class VehicleRoute(models.Model):
 
     class Meta:
         unique_together = (("vehicle", "route"),)
+
+    def __str__(self):
+        return "Vehicle: " + self.vehicle.registration_number + " - Route: " + self.route.route_number
 
     def __unicode__(self):
         return "Vehicle: " + self.vehicle.registration_number + " - Route: " + self.route.route_number
@@ -42,6 +51,9 @@ class VehicleStatus(models.Model):
 
     class Meta:
         verbose_name_plural = "vehicle status"
+
+    def __str__(self):
+        return self.route_number + "(" + str(self.vehicle_id) + ") - " + self.status
 
     def __unicode__(self):
         return self.route_number + "(" + str(self.vehicle_id) + ") - " + self.status
