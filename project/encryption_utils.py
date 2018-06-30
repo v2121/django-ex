@@ -32,7 +32,7 @@ def encrypt(plaintext, password):
     padded_plaintext = pad_text(plaintext, AES_MULTIPLE)
     ciphertext = cipher.encrypt(padded_plaintext)
     ciphertext_with_salt = salt + ciphertext
-    return str(base64.b64encode(ciphertext_with_salt))
+    return str(base64.b64encode(ciphertext_with_salt), 'utf-8')
 
 def decrypt(ciphertext, password):
     ciphertext = base64.b64decode(ciphertext)
@@ -42,4 +42,4 @@ def decrypt(ciphertext, password):
     cipher = AES.new(key, AES.MODE_ECB)
     padded_plaintext = cipher.decrypt(ciphertext_sans_salt)
     plaintext = unpad_text(padded_plaintext)
-    return str(plaintext)
+    return str(plaintext, 'utf-8')
