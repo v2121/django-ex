@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.contrib.auth import authenticate
 from django.db import connection
 from datetime import datetime
-from models import Vehicle, Route, VehicleRoute, VehicleStatus
+from vehicle.models import Vehicle, Route, VehicleRoute, VehicleStatus
 from project import encryption_utils as crypt
 import json
 
